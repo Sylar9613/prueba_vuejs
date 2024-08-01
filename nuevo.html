@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="w3.css" />
+    <link rel="stylesheet" href="my_css.css" />
+    <script src="vue.js"></script>
+  </head>
+  <body class="bg-dark text-white">
+    <div style="width: 100%; height: auto" id="main">
+      <div class="container-fluid">
+        <div class="form-group">
+          <div style="float: right">
+            <div style="float: right">
+              <label for="libre" style="font-size: 20px">Libre</label>
+              <input
+                class="form-control"
+                style="width: 150px"
+                type="text"
+                name="libre"
+                id="libre"
+                disabled
+              />
+            </div>
+            <div style="margin-right: 250px">
+              <label for="porciento" style="font-size: 20px">&percnt;</label>
+              <input
+                class="form-control"
+                style="width: 150px"
+                type="text"
+                name="porciento"
+                id="porciento"
+                disabled
+              />
+            </div>
+          </div>
+          <div style="width: 50%">
+            <div style="float: right; width: 100px">
+              <label for="lista" style="font-size: 20px">&num; Lista</label>
+              <input
+                tabindex="1"
+                class="form-control"
+                style="width: 150px"
+                type="text"
+                name="lista"
+                id="lista"
+              />
+            </div>
+            <div style="float: right; margin-right: -50%">
+              <label for="bruto" style="font-size: 20px">Bruto</label>
+              <input
+                class="form-control"
+                style="width: 150px"
+                type="text"
+                name="bruto"
+                id="bruto"
+                disabled
+              />
+            </div>
+          </div>
+          <div style="float: right; margin-right: -40%; margin-top: 7%">
+            <button
+              id="boton"
+              tabindex="3"
+              class="btn button bg-primary-angular"
+              onclick="sum(15)"
+            >
+              Calcular 15%
+            </button>
+            <button
+              id="boton2"
+              tabindex="4"
+              class="btn button bg-excel"
+              onclick="sum(25)"
+            >
+              Calcular 25%
+            </button>
+            <button
+              id="reset"
+              tabindex="5"
+              class="btn button bg-warn"
+              onclick="reset()"
+            >
+              Reset
+            </button>
+          </div>
+          <div>
+            <label for="numbers" style="font-size: 20px">Sumatoria</label>
+            <textarea
+              tabindex="2"
+              class="form-control"
+              style="width: 600px; font-size: 25px"
+              name="numbers"
+              id="numbers"
+              cols="30"
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+        <br />
+
+        <div style="font-size: 15px; float: right; width: 35%">
+          <table
+            id="tabla"
+            class="table table-responsive"
+            width="100%"
+            cellspacing="0"
+            align="center"
+            style="text-align: center"
+          >
+            <thead>
+              <tr class="blue-grey">
+                <th># Lista</th>
+                <th>Bruto</th>
+                <th>%</th>
+                <th>Libre</th>
+                <th>Premio</th>
+                <th>Recoger</th>
+                <th>Dar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="blue-grey"
+                v-for="todo in todos"
+                style="font-weight: bolder"
+              >
+                <td>{{ todo.lista }}</td>
+                <td>{{ todo.bruto }}</td>
+                <td>{{ todo.percent }}</td>
+                <td>{{ todo.libre }}</td>
+                <td>{{ todo.premio }}</td>
+                <td>{{ todo.recoger }}</td>
+                <td>{{ todo.dar }}</td>
+              </tr>
+              <tr
+                v-for="total in totales"
+                style="font-weight: bolder; border-style: hidden"
+              >
+                <td>{{ total.lista }}</td>
+                <td>{{ total.bruto }}</td>
+                <td>{{ total.percent }}</td>
+                <td>{{ total.libre }}</td>
+                <td>{{ total.premio }}</td>
+                <td>
+                  {{ total.recoger }}
+                  <hr
+                    style="margin-bottom: -50px; margin-top: 10px"
+                    class="bg-white"
+                    v-if="total.minus"
+                  />
+                </td>
+                <td>
+                  {{ total.dar }}
+                  <hr
+                    style="margin-bottom: -190px; margin-top: 5px; width: 50px"
+                    class="bg-white"
+                    v-if="total.plus"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="float: right; width: 20%">
+          <div id="fondo">
+            <div v-if="!seen">
+              <label for="ft" style="font-size: 20px">Fondo</label>
+              <input
+                tabindex="20"
+                class="form-control"
+                style="width: 150px"
+                type="text"
+                name="ft"
+                id="ft"
+              />
+            </div>
+            <pre><label id="time" for="time" v-if="seen" class="text-white" style="
+                            margin-left: 0;
+                            margin-right: 50px;
+                            padding: 8px;
+                            font-size: 18px;
+                            font-weight: bolder;
+                            border-style: dashed;
+                          ">{{ time }}{{ res }}<br/><br/><span style="float: right; text-align: right;">{{ shoot }}</span></label></pre>
+            <div v-if="!seen">
+              <label for="tiroInput" style="font-size: 20px">Tiro</label>
+              <input
+                tabindex="21"
+                class="form-control"
+                style="width: 150px"
+                type="text"
+                name="tiroInput"
+                id="tiroInput"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" style="width: 55%">
+          <div style="float: right; width: 100px; margin-right: 130px">
+            <label for="parlet" style="font-size: 20px">Parlet</label>
+            <input
+              tabindex="8"
+              class="form-control"
+              style="width: 150px"
+              type="text"
+              name="parlet"
+              id="parlet"
+            />
+          </div>
+          <div style="float: right; width: 100px; margin-right: 130px">
+            <label for="candado" style="font-size: 20px">Candado</label>
+            <input
+              tabindex="7"
+              class="form-control"
+              style="width: 150px"
+              type="text"
+              name="candado"
+              id="candado"
+            />
+          </div>
+
+          <label for="fijo" style="font-size: 20px">Fijo</label>
+          <input
+            tabindex="6"
+            class="form-control"
+            style="width: 150px"
+            type="text"
+            name="fijo"
+            id="fijo"
+          />
+          <br />
+          <div style="float: right; width: 100px; margin-right: 130px">
+            <label for="centenacorrido" style="font-size: 20px"
+              >Centena C.</label
+            >
+            <input
+              tabindex="11"
+              class="form-control"
+              style="width: 150px"
+              type="text"
+              name="centenacorrido"
+              id="centenacorrido"
+            />
+          </div>
+          <div style="float: right; width: 100px; margin-right: 130px">
+            <label for="centenafijo" style="font-size: 20px">Centena F.</label>
+            <input
+              tabindex="10"
+              class="form-control"
+              style="width: 150px"
+              type="text"
+              name="centenafijo"
+              id="centenafijo"
+            />
+          </div>
+
+          <label for="corrido" style="font-size: 20px">Corrido</label>
+          <input
+            tabindex="9"
+            class="form-control"
+            style="width: 150px"
+            type="text"
+            name="corrido"
+            id="corrido"
+          />
+        </div>
+        <br />
+
+        <button
+          tabindex="12"
+          id="boton3"
+          class="btn button bg-primary-angular"
+          onclick="sumFin(80)"
+        >
+          C&aacute;lculo &ast;80
+        </button>
+        <button
+          tabindex="13"
+          id="boton4"
+          class="btn button bg-excel"
+          onclick="sumFin(70)"
+        >
+          C&aacute;lculo &ast;70
+        </button>
+        <button
+          tabindex="14"
+          id="boton5"
+          class="btn button blue-grey"
+          onclick="cuadrar()"
+        >
+          Cuadrar
+        </button>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
